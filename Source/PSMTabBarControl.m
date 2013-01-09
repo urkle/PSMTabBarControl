@@ -1806,26 +1806,28 @@ static NSMutableDictionary *registeredStyleClasses;
 	}
 
 	[sender retain];
+    NSTabViewItem* representedObject = [sender representedObject];
 
     if (([self delegate]) && ([[self delegate] respondsToSelector:@selector(tabView:shouldCloseTabViewItem:)])) {
-        if (![[self delegate] tabView:tabView shouldCloseTabViewItem:[sender representedObject]]) {
+        if (![[self delegate] tabView:tabView shouldCloseTabViewItem:representedObject]) {
              // fix mouse downed close button
              [sender setCloseButtonPressed:NO];
              return;
          }
     }
 
+
     if (([self delegate]) && ([[self delegate] respondsToSelector:@selector(tabView:willCloseTabViewItem:)])) {
-         [[self delegate] tabView:tabView willCloseTabViewItem:[sender representedObject]];
+         [[self delegate] tabView:tabView willCloseTabViewItem:representedObject];
     }
-     
-    [[sender representedObject] retain];
-    [tabView removeTabViewItem:[sender representedObject]];
+
+    [representedObject retain];
+    [tabView removeTabViewItem:representedObject];
      
     if (([self delegate]) && ([[self delegate] respondsToSelector:@selector(tabView:didCloseTabViewItem:)])) {
-         [[self delegate] tabView:tabView didCloseTabViewItem:[sender representedObject]];
+         [[self delegate] tabView:tabView didCloseTabViewItem:representedObject];
     }
-    [[sender representedObject] release];
+    [representedObject release];
 
 	[sender release];
 }
